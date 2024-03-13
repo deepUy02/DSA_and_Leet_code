@@ -1,0 +1,37 @@
+bool isPossible(vector<int>&bloomDay,int day ,int m ,int k){
+        int count=0;
+        int numberofBQT=0;
+        for(int i=0;i<bloomDay.size();i++){
+            if(bloomDay[i]<=day){
+                count++;
+            }
+            else{
+                numberofBQT += (count/k);
+                count=0;
+            }
+        }
+        numberofBQT += (count/k);
+        return numberofBQT >= m;
+}
+int minDays(vector<int>& bloomDay, int m, int k) {
+        // long long ans=m*1LL * k*1LL;
+        // if(ans > bloomDay.size())  return -1;
+        if(m > bloomDay.size()/k)  return -1;
+        int  low = 0;
+        int high = 1;
+
+        for(int i=0;i<bloomDay.size();i++){
+            high=max(high,bloomDay[i]);
+        }
+        
+        while(low<=high){
+            int mid = low + (high-low)/2;
+            if(isPossible(bloomDay,mid,m,k)){
+                high=mid-1;
+            }
+            else{
+                low=mid+1;
+            }
+        }
+        return low;
+}
