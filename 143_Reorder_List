@@ -1,0 +1,32 @@
+ListNode* reverseLL(ListNode* head){
+        if(head==NULL || head->next==NULL){
+            return head;
+        }
+
+        ListNode* temp=reverseLL(head->next);
+        head->next->next=head;
+        head->next=NULL;
+        return temp;
+    }
+
+    void reorderList(ListNode* head) {
+        ListNode* slow=head;
+        ListNode* fast=head;
+        while(fast && fast->next){
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        ListNode* rev=reverseLL(slow);
+        ListNode* curr=head;
+
+        while(rev->next!=NULL){
+            ListNode* tempcurr=curr->next;
+            curr->next=rev;
+
+            ListNode* temprev=rev->next;
+            rev->next=tempcurr;
+
+            curr=tempcurr;
+            rev=temprev;
+        }
+    }
