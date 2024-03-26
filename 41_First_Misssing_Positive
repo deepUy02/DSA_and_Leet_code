@@ -1,0 +1,36 @@
+// Time Complexity:- O(n)
+//Space Complexity:- O(1)
+
+int firstMissingPositive(vector<int>& nums) {
+        
+        bool isOne=false;   //take the presense of one is false in the array 
+
+        for(int i = 0;i < nums.size(); i++){ //check in the array is there 1 is present or Not
+            if(nums[i] == 1){       //if 1 is present in the array then make the isOne into true
+                isOne = true;
+            }
+            //is any element in the array is not in the range of[1,n] the convert that element into 1
+            if(nums[i] <= 0 || nums[i] > nums.size()){    
+                nums[i] = 1;
+            }
+        }
+        //if one is not present in the array that means the one is the first positive number 
+        if(isOne == false){
+            return 1;
+        }
+        //now mark the all element in the array into negative 
+        for(int i = 0;i < nums.size(); i++){
+            int num=abs(nums[i]);
+            int index=num-1;
+            if(nums[index] < 0) continue; //if element is already -ve the skip it 
+            nums[index] *= -1; 
+        }
+
+        //check to whole array if any element in the array is +ve the return i+1
+        for(int i = 0;i < nums.size();i++){
+            if(nums[i] > 0){
+                return i + 1;
+            }
+        }
+        return nums.size() + 1;
+    }
