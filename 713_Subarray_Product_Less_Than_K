@@ -1,0 +1,25 @@
+//Apply Simple basic Sliding Window concept
+
+int numSubarrayProductLessThanK(vector<int>& nums, int k) {
+        //if the value of k is or 0 the it is not possible to find the subarray 
+        if(k <= 1){
+            return 0;
+        }
+        //Now applying the simple sliding window 
+        int i = 0;
+        int j = 0;
+
+        int product = 1;
+        int ans=0;
+        while(j < nums.size()){    //traverse to the whole array till the last element of the array 
+
+            product *= nums[j];     //taking the product of the element in the current window 
+            while(product >= k){
+                product /= nums[i];
+                i++;    //if the product of current window is more or equal to the k the move i pointer
+            }
+            ans += (j - i + 1);      //taking the total no. of subarray possible in the current window 
+            j++;
+        }
+        return ans;
+    }
