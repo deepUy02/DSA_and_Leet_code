@@ -1,0 +1,49 @@
+Approach-1: Using Nornal Sliding Window and Hashmap
+TC: O(2n)  each element is visited twice 
+SC: O(n)
+
+int maxSubarrayLength(vector<int>& nums, int k) {
+        int i=0;
+        int j=0;
+        int ans=0;
+        unordered_map<int,int>mp;
+
+        while(j < nums.size()){
+            mp[nums[j]]++;//taking the all frequency of the element in the window 
+            while(i < j && mp[nums[j]] > k){
+                mp[nums[i]]--;//if the frequency of any element in the window is greater then the k then decrease the  frequency of the element
+                i++;//after decreasing the frequency increment the i pointer 
+            }
+            ans = max(ans, j-i+1);//update the result
+            j++;
+        }
+        return ans;
+    }
+
+Approach-2: 
+
+int maxSubarrayLength(vector<int>& nums, int k) {
+        int i=0;
+        int j=0;
+        int ans=0;
+        int bad=0;
+        unordered_map<int,int>mp;
+        while(j < nums.size()){
+            mp[nums[j]]++;
+            if(mp[nums[j]]==k+1){
+                bad++;
+            }
+            if(bad > 0){
+                mp[nums[i]]--;
+                if(mp[nums[i]]==k){
+                    bad--;
+                }
+                i++;
+            }
+            if(bad == 0){
+                ans=max(ans,j-i+1);
+            }
+            j++;
+        }
+        return ans;
+    }
