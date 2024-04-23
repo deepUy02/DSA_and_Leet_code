@@ -1,63 +1,96 @@
-Approach1-(Recursion)
+Approach-1(Recursion)
+TC-Exponential
+
+#include <bits/stdc++.h> 
 #define MOD 1000000007
-long long int countDerangements(int n) {
+int add(int a ,int b){
+    return (a%MOD + b%MOD)%MOD;
+}
+int mul(int a ,int b){
+    return ((a%MOD)*(b%MOD))%MOD;
+}
+
+int solve(int n ,int k){
     //base case
-    if(n == 1)
-        return 0;
-    if(n == 2)
-        return 1;
-    int ans = (((n-1)%MOD) *((countDerangements(n-2))%MOD + (countDerangements(n-1))%MOD))%MOD;
+    if(n==1){
+        return k;
+    }
+    if(n==2){
+        return add(k, mul(k,k-1));
+    }
+    
+    int ans = add(mul(solve(n-2,k) , k-1), mul(solve(n-1,k) , k-1));
     return ans;
 }
+int numberOfWays(int n, int k) {
+    return solve(n , k);
+}
 
 
-Approach-2(Recursion + Memorization)
+Approach-2(Memorization)
+TC-O(N)
+SC-O(N)+O(N)
 
+#include <bits/stdc++.h> 
 #define MOD 1000000007
-#include<bits/stdc++.h>
-long long int solve(int n , vector<long long int > &dp){
+int add(int a ,int b){
+    return (a%MOD  + b%MOD)%MOD;
+}
+int mul(int a ,int b){
+    return ((a%MOD)* 1LL *(b%MOD))%MOD;
+}
+
+int solve(int n ,int k, vector<int>&dp){
     //base case
-    if(n == 1)
-        return 0;
-    if(n == 2)
-        return 1;
-    //Step-3
-    if(dp[n] != -1){
-            return dp[n];
+    if(n==1){
+        return k;
     }
+    if(n==2){
+        return add(k, mul(k,k-1));
+    }
+    //Step-3
+    if(dp[n] != -1)
+        return dp[n];
     //Step-2
-    dp[n] = (((n-1)%MOD) *((solve(n-1,dp)%MOD) + (solve(n-2,dp)%MOD))%MOD);
+    dp[n] = add(mul(solve(n-2,k,dp) , k-1), mul(solve(n-1,k, dp) , k-1));
     return dp[n];
 }
-long long int countDerangements(int n) {
-    //Step-1
-    vector<long long int>dp(n+1, -1);
-    return solve(n, dp);
+int numberOfWays(int n, int k) {
+    //Step-1    
+    vector<int>dp(n+1, -1);
+    return solve(n , k, dp);
 }
 
 Approach-3(Tabulation)
+TC-O(N)
+SC-O(N)
 
+#include <bits/stdc++.h> 
 #define MOD 1000000007
-#include<bits/stdc++.h>
-long long int solve(int n){
-    //base case
-    vector<long long int >dp(n+1,0);
-    dp[1]=0;
-    dp[2]=1;
-    for(int i = 3;i <= n; i++){
-        long long int first = dp[i-1]%MOD;
-        long long int second = dp[i-2]%MOD;
-        long long int sum = (first + second);
-        long long int ans = ((i-1)*sum)%MOD;
-        dp[i] = ans;
+int add(int a ,int b){
+    return (a%MOD  + b%MOD)%MOD;
+}
+int mul(int a ,int b){
+    return ((a%MOD)* 1LL *(b%MOD))%MOD;
+}
+
+int solve(int n ,int k){
+    vector<int>dp(n+1, 0);
+    dp[1] = k;
+    dp[2] = add(k, mul(k,k-1));
+
+    for (int i = 3; i <=n ; i++) {
+        dp[i] = add(mul(dp[i - 2], k - 1), mul(dp[i - 1], k - 1));
     }
     return dp[n];
 }
-long long int countDerangements(int n) {
-    return solve(n);
+int numberOfWays(int n, int k) {
+    return solve(n , k);
 }
 
 Approach-4(Space Optimization)
+TC-O(N)
+SC-O(1)
 
 #define MOD 1000000007
 #include<bits/stdc++.h>
@@ -80,4 +113,4 @@ long long int solve(int n){
 }
 long long int countDerangements(int n) {
     return solve(n);
-}
+}	
